@@ -8,7 +8,7 @@
  */
 
 
-var ScrollView = function(o) {
+var ScrollView = function (o) {
 
         var self = this, ws = {}, sesslog = '', freeze, mobile = Config.device.mobile, touch = Config.device.touch, multi;
         var cmds = [], cmdi = 0, echo = 1;
@@ -31,30 +31,29 @@ var ScrollView = function(o) {
         var id = '#scroll-view';
 
         o.local = (Config.getSetting('echo') == null || Config.getSetting('echo') == 1);
-        o.echo = o.echo||1;
+        o.echo = o.echo || 1;
 
         var win = new Window({
                 id: id,
                 css: o.css,
                 'class': 'scroll-view nofade',
                 master: !Config.notrack,
-                closeable: Config.ControlPanel
         });
 
         if (mobile) {
 
-            j('#page').css({
-                background: 'none no-repeat fixed 0 0 #000000',
-                margin: '0px auto'
-            });
+                j('#page').css({
+                        background: 'none no-repeat fixed 0 0 #000000',
+                        margin: '0px auto'
+                });
 
-            j('body').css({
-                width: '100%',
-                height: '100%',
-                overflow: 'auto'
-            });
+                j('body').css({
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'auto'
+                });
 
-            win.maximize();
+                win.maximize();
         }
 
         if (touch)
@@ -63,7 +62,7 @@ var ScrollView = function(o) {
         win.button({
                 title: 'Reconnect.',
                 icon: 'icon-refresh',
-                click: function() {
+                click: function () {
                         echo('Attempting to reconnect...');
                         Config.socket.reconnect();
                 }
@@ -72,11 +71,11 @@ var ScrollView = function(o) {
         win.button({
                 title: 'Increase font size.',
                 icon: 'icon-zoom-in',
-                click: function(e) {
+                click: function (e) {
                         var v = parseInt(j(id + ' .out').css('fontSize'));
                         j(id + ' .out').css({
                                 fontSize: ++v + 'px',
-                                lineHeight: (v+5) + 'px'
+                                lineHeight: (v + 5) + 'px'
                         });
                         j(id + ' .out').scrollTop(j(id + ' .out').prop('scrollHeight'));
                         e.stopPropagation();
@@ -87,11 +86,11 @@ var ScrollView = function(o) {
         win.button({
                 title: 'Decrease font size.',
                 icon: 'icon-zoom-out',
-                click: function(e) {
+                click: function (e) {
                         var v = parseInt(j(id + ' .out').css('fontSize'));
                         j(id + ' .out').css({
                                 fontSize: --v + 'px',
-                                lineHeight: (v+5) + 'px'
+                                lineHeight: (v + 5) + 'px'
                         });
                         j(id + ' .out').scrollTop(j(id + ' .out').prop('scrollHeight'));
                         e.stopPropagation();
@@ -102,9 +101,9 @@ var ScrollView = function(o) {
         win.button({
                 title: 'Download session log.',
                 icon: 'icon-download-alt',
-                click: function(e) {
-                        var blob = new Blob(sesslog.split(), {type: "text/plain;charset=utf-8"});
-                        saveAs(blob, "log-"+Config.host+"-"+(new Date).ymd()+".txt");
+                click: function (e) {
+                        var blob = new Blob(sesslog.split(), { type: "text/plain;charset=utf-8" });
+                        saveAs(blob, "log-" + Config.host + "-" + (new Date).ymd() + ".txt");
                         e.stopPropagation();
                         return false;
                 }
@@ -114,17 +113,17 @@ var ScrollView = function(o) {
         win.button({
                 title: 'Toggle Side Panel.',
                 icon: 'icon-columns',
-                click: function(e) {
+                click: function (e) {
                         if (j(id + ' .freeze').length) {
                                 try {
                                         freeze.remove();
                                         j(id + ' .freeze').remove();
                                         j(id + ' .out').width('98%');
                                         j(id + ' .out').scrollTop(j(id + ' .out').prop('scrollHeight'));
-                                } catch(ex) { log(ex) }
+                                } catch (ex) { log(ex) }
                         }
                         else {
-                                j(id + ' .out').after('<div class="freeze">'+j(id + ' .out').html()+'</div>');
+                                j(id + ' .out').after('<div class="freeze">' + j(id + ' .out').html() + '</div>');
                                 j(id + ' .out').width('52%');
                                 freeze = j(id + ' .freeze').niceScroll({
                                         cursorwidth: 7,
@@ -140,7 +139,7 @@ var ScrollView = function(o) {
 
         var mapWindow;
         var mapBuffer = '';
-        var initMapWindow = function() {
+        var initMapWindow = function () {
                 var mainWin = j(id);
                 var mainOffset = mainWin.offset();
                 var mainWidth = mainWin.width();
@@ -157,7 +156,7 @@ var ScrollView = function(o) {
                                 top: mainOffset.top
                         },
                         closeable: true,
-                        onClose: function() {
+                        onClose: function () {
                                 Config.showMapWindow = false;
                         }
                 });
@@ -179,13 +178,13 @@ var ScrollView = function(o) {
         };
 
         // Initialize map window after a short delay to ensure main window is positioned
-        setTimeout(function() {
+        setTimeout(function () {
                 initMapWindow();
                 log('Map window initialized');
         }, 500);
 
         var colorizer = new Colorize();
-        var updateMapContent = function(content) {
+        var updateMapContent = function (content) {
                 log('updateMapContent called with content length: ' + content.length);
                 if (mapWindow && j('#map-window').length) {
                         var colorized = colorizer.process(content);
@@ -200,7 +199,7 @@ var ScrollView = function(o) {
                 }
         };
 
-        var processMapBuffer = function() {
+        var processMapBuffer = function () {
                 var fullText = mapBuffer;
                 mapBuffer = '';
 
@@ -213,8 +212,8 @@ var ScrollView = function(o) {
         };
 
         // Listen to multiple events to catch map content
-        ['after_protocols', 'before_html', 'before_display'].forEach(function(eventName) {
-                Event.listen(eventName, function(m) {
+        ['after_protocols', 'before_html', 'before_display'].forEach(function (eventName) {
+                Event.listen(eventName, function (m) {
                         try {
                                 // Extract map content when both tags are present
                                 if (m.indexOf('<MAPSTART>') !== -1 && m.indexOf('<MAPEND>') !== -1) {
@@ -223,7 +222,7 @@ var ScrollView = function(o) {
                                                 updateMapContent(mapMatch[1]);
                                         }
                                 }
-                        } catch(ex) { log('ScrollView map display error: ', ex); }
+                        } catch (ex) { log('ScrollView map display error: ', ex); }
                         return m;
                 });
         });
@@ -231,7 +230,7 @@ var ScrollView = function(o) {
         j(id + ' .content').append('\
                 <div class="out nice"></div>\
                 <div class="input">\
-                        <input class="send" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="'+(Config.getSetting('spellcheck')?'true':'false')+'" placeholder="Enter a command..." aria-live="polite"/></div>\
+                        <input class="send" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="'+ (Config.getSetting('spellcheck') ? 'true' : 'false') + '" placeholder="Enter a command..." aria-live="polite"/></div>\
         ');
 
         if (mobile) {
@@ -245,39 +244,39 @@ var ScrollView = function(o) {
 
                 j(id + ' .input').append('<a class="kbutton multiline tip" title="Enter mulit-line text." style="height: 16px !important; padding: 4px 8px !important; margin-left: 6px; position: relative; top: 3px;"><i class="icon-align-justify"></i></a>');
 
-                multi = function(e, text) {
+                multi = function (e, text) {
 
                         var modal = new Modal({
 
                                 title: 'Multi-Line Input',
-                                text: '<textarea class="multitext" autocorrect="off" autocapitalize="off" spellcheck="'+(Config.getSetting('spellcheck')?'true':'false')+'">'+(text||'')+'</textarea>',
+                                text: '<textarea class="multitext" autocorrect="off" autocapitalize="off" spellcheck="' + (Config.getSetting('spellcheck') ? 'true' : 'false') + '">' + (text || '') + '</textarea>',
                                 closeable: 1,
                                 buttons: [
-                                     {
-                                         text: 'Send',
-                                         click: function() {
-                                                 var msg = j('.multitext').val().split('\n');
-                                                 var ws = Config.Socket.getSocket();
-                                                 for (var i = 0; i < msg.length; i++) {
-                                                         var go = function(msg) {
-                                                                return function() {
-                                                                        ws.send(msg + '\r\n');
-                                                                        echo(msg);
-                                                                        //cmds.push(msg);
-                                                                        //cmdi = cmds.length;
-                                                                }
-                                                         }(msg[i]);
-                                                         setTimeout(go, 100 * (i+1));
-                                                 }
-                                         }
-                                     },
-                                     {
-                                         text: 'Cancel'
-                                     }
+                                        {
+                                                text: 'Send',
+                                                click: function () {
+                                                        var msg = j('.multitext').val().split('\n');
+                                                        var ws = Config.Socket.getSocket();
+                                                        for (var i = 0; i < msg.length; i++) {
+                                                                var go = function (msg) {
+                                                                        return function () {
+                                                                                ws.send(msg + '\r\n');
+                                                                                echo(msg);
+                                                                                //cmds.push(msg);
+                                                                                //cmdi = cmds.length;
+                                                                        }
+                                                                }(msg[i]);
+                                                                setTimeout(go, 100 * (i + 1));
+                                                        }
+                                                }
+                                        },
+                                        {
+                                                text: 'Cancel'
+                                        }
                                 ]
                         });
 
-                        j('#modal').on('shown', function() {
+                        j('#modal').on('shown', function () {
                                 j('.multitext').focus();
                                 //j('#modal').resizable();
                         });
@@ -293,12 +292,12 @@ var ScrollView = function(o) {
                         j(id + ' .send').autocomplete({
                                 appendTo: "body",
                                 minLength: 2,
-                                source: function(request, response) {
-                                        var c = cmds.filter(function (v, i, a) { return a.indexOf (v) == i });
+                                source: function (request, response) {
+                                        var c = cmds.filter(function (v, i, a) { return a.indexOf(v) == i });
                                         var results = j.ui.autocomplete.filter(c, request.term);
                                         response(results.slice(0, 5));
                                 }
-                        }); 
+                        });
         }
 
         j(id + ' .out').niceScroll({
@@ -330,14 +329,14 @@ var ScrollView = function(o) {
 
         if (Config.device.mobile) {
 
-                j(id + ' .send').focus(function() {
+                j(id + ' .send').focus(function () {
                         //this.setSelectionRange(0, 9999);
                         //j(this).val('');
                         j(id).height('82%');
                         scroll();
                 });
 
-                j(id + ' .send').blur(function() {
+                j(id + ' .send').blur(function () {
                         /*if (j(this).val().length) {
                                 ws.send(j(this).val());
                                 j(this).val('');
@@ -347,13 +346,13 @@ var ScrollView = function(o) {
                         scroll();
                 });
 
-                document.addEventListener('touchstart', function(e) {
-                    scroll();
-                    //var touch = e.touches[0];
-                    //alert(touch.pageX + " - " + touch.pageY);
+                document.addEventListener('touchstart', function (e) {
+                        scroll();
+                        //var touch = e.touches[0];
+                        //alert(touch.pageX + " - " + touch.pageY);
                 }, false);
 
-                j(id + ' .send').keydown(function(e) {
+                j(id + ' .send').keydown(function (e) {
 
                         if (e.which == 13) { /* enter */
 
@@ -372,13 +371,13 @@ var ScrollView = function(o) {
         }
         else {
 
-                j(id + ' .send').focus(function() {
+                j(id + ' .send').focus(function () {
 
                         if (!j(this).is(":focus"))
                                 j(this).select();
                 });
 
-                j(id + ' .send').focus().keydown(function(e) {
+                j(id + ' .send').focus().keydown(function (e) {
 
                         if (e.which == 13) { /* enter */
 
@@ -396,7 +395,7 @@ var ScrollView = function(o) {
                                                 else
                                                         j(this).val('');
                                         } else {
-                                                        j(this).val('');
+                                                j(this).val('');
                                         }
                                 }
                                 else ws.send('\r\n');
@@ -416,7 +415,7 @@ var ScrollView = function(o) {
 
                                 e.preventDefault();
 
-                                if (cmdi < cmds.length-1)
+                                if (cmdi < cmds.length - 1)
                                         j(this).val(cmds[++cmdi]);
 
                                 this.select();
@@ -425,16 +424,16 @@ var ScrollView = function(o) {
                 });
         }
 
-    Event.listen('internal_colorize', new Colorize().process);
+        Event.listen('internal_colorize', new Colorize().process);
 
-    Event.listen('after_display', function(m) {
+        Event.listen('after_display', function (m) {
                 try {
                         sesslog += m.replace(/<br>/gi, '\n').replace(/<.+?>/gm, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
-                } catch(ex) { log('ScrollView.after_display ', ex); }
-        return m;
-    });
+                } catch (ex) { log('ScrollView.after_display ', ex); }
+                return m;
+        });
 
-        var add = function(A) {
+        var add = function (A) {
 
                 var my = j(id + ' .out');
 
@@ -447,20 +446,20 @@ var ScrollView = function(o) {
                         j(id + ' .out').html(t.slice(i));
                 }
                 // console.log('add("' + A + '")\n');
-                my.append('<span>'+A+'</span>');
+                my.append('<span>' + A + '</span>');
                 scroll();
 
                 if (j(id + ' .freeze').length)
-                        j(id + ' .freeze').append('<span>'+A+'</span>');
+                        j(id + ' .freeze').append('<span>' + A + '</span>');
 
                 Event.fire('scrollview_add', A, self);
         }
 
-        var scroll = function() {
+        var scroll = function () {
                 j(id + ' .out').scrollTop(j(id + ' .out').prop('scrollHeight'));
         }
 
-        var echo = function(msg) {
+        var echo = function (msg) {
 
                 // we also echo empty lines after Enter!!
                 //if (!msg.length)
@@ -470,30 +469,30 @@ var ScrollView = function(o) {
 
                 if (o.local && o.echo) {
 
-                        msg = msg.replace(/&/g,'&amp;');
-                        msg = msg.replace(/\>/g,'&gt;');
-                        msg = msg.replace(/\</g,'&lt;');
+                        msg = msg.replace(/&/g, '&amp;');
+                        msg = msg.replace(/\>/g, '&gt;');
+                        msg = msg.replace(/\</g, '&lt;');
 
                         // add() above already surrounds with span.
                         add('</span><span style="font-size: 12px; color: gold; opacity: 0.6">' + msg + '<br>');
                 }
         }
 
-        var title = function(t) {
+        var title = function (t) {
                 win.title(t);
-                document.title = t.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&') || param('name');
+                document.title = t.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&') || param('name');
         }
 
         title(Config.name || (Config.host + ':' + Config.port));
 
-        var echoOff = function() {
+        var echoOff = function () {
                 o.echo = 0;
-                j('.send').css({'color':j('.send').css('background-color')});
+                j('.send').css({ 'color': j('.send').css('background-color') });
         }
 
-        var echoOn = function() {
+        var echoOn = function () {
                 o.echo = 1;
-                j('.send').css({'color':''});
+                j('.send').css({ 'color': '' });
         }
 
         var self = {
@@ -515,7 +514,7 @@ var ScrollView = function(o) {
                 out: self
         });
 
-        j(document).on('keydown', function(e) {
+        j(document).on('keydown', function (e) {
 
                 if (j(':focus').is('input'))
                         return true;
