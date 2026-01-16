@@ -152,7 +152,7 @@ var ScrollView = function(o) {
                         'class': 'nofade',
                         css: {
                                 width: 300,
-                                height: 800,
+                                height: 500,
                                 left: (mainOffset.left + mainWidth + 10),
                                 top: mainOffset.top
                         },
@@ -189,7 +189,7 @@ var ScrollView = function(o) {
                 log('updateMapContent called with content length: ' + content.length);
                 if (mapWindow && j('#map-window').length) {
                         var colorized = colorizer.process(content);
-                        j('#map-window .map-content').html('<div style="margin: 0; padding: 5px; font-family: \'DejaVu Sans Mono\', monospace; white-space: pre-wrap; word-break: keep-all; line-height: 10px; color: #e1e1e1;">' + colorized + '</div>');
+                        j('#map-window .map-content').html('<div style="margin: 0; padding: 5px; font-family: \'DejaVu Sans Mono\', monospace; white-space: pre-wrap; word-break: keep-all; line-height: 7px; color: #e1e1e1;">' + colorized + '</div>');
                         var nicescroll = j('#map-window .map-content').getNiceScroll();
                         if (nicescroll.length) {
                                 nicescroll[0].resize();
