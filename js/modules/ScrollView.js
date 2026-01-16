@@ -138,7 +138,7 @@ var ScrollView = function (o) {
         });
 
         var mapWindow;
-        var mapBuffer = '';
+        var mapWindow;
         var initMapWindow = function () {
                 var mainWin = j(id);
                 var mainOffset = mainWin.offset();
@@ -199,17 +199,6 @@ var ScrollView = function (o) {
                 }
         };
 
-        var processMapBuffer = function () {
-                var fullText = mapBuffer;
-                mapBuffer = '';
-
-                var mapMatch = fullText.match(/<MAPSTART>(.*?)<MAPEND>/);
-                if (mapMatch && mapMatch[1]) {
-                        updateMapContent(mapMatch[1]);
-                } else {
-                        mapBuffer = fullText;
-                }
-        };
 
         // Listen to multiple events to catch map content
         ['after_protocols', 'before_html', 'before_display'].forEach(function (eventName) {
@@ -221,6 +210,8 @@ var ScrollView = function (o) {
                                         if (mapMatch && mapMatch[1]) {
                                                 updateMapContent(mapMatch[1]);
                                         }
+                                        // Strip the map content from the message so it's not displayed in terminal
+                                        m = m.replace(/<MAPSTART>.*?<MAPEND>/gs, '');
                                 }
                         } catch (ex) { log('ScrollView map display error: ', ex); }
                         return m;

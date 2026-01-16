@@ -64,8 +64,8 @@ var SafeBars = function (o) {
             css: {
                 height: 160,
                 width: 400,
-                top: 400,
-                left: Config.width,
+                top: Config.top + 500 + 10,
+                left: Config.left + Config.width + 10,
                 zIndex: 200
             }
         });
@@ -142,8 +142,9 @@ var SafeBars = function (o) {
     var parsePrompt = function (d) {
         if (!d || typeof d !== 'string') return d;
 
+        // Pattern: [Fighting: 132/305hp 294/294mn 348/704mv 837tnl Enemy: 65% ]
         // Pattern: [289/289hp 278/278mn 685/686mv 0qt 243tnl]
-        var match = d.match(/\[(\d+)\/(\d+)hp\s+(\d+)\/(\d+)mn\s+(\d+)\/(\d+)mv/i);
+        var match = d.match(/\[(?:Fighting:\s+)?(\d+)\/(\d+)hp\s+(\d+)\/(\d+)mn\s+(\d+)\/(\d+)mv.*?(?:Enemy:\s+(\d+)%)?\s*\]/i);
         if (match) {
             console.log("SafeBars: matched prompt", match[0]);
             cv.hp = parseInt(match[1]);
@@ -152,6 +153,14 @@ var SafeBars = function (o) {
             cv.maxmana = parseInt(match[4]);
             cv.moves = parseInt(match[5]);
             cv.maxmoves = parseInt(match[6]);
+
+            if (match[7] !== undefined) {
+                cs.enemypct = parseInt(match[7]);
+                if (!cs.enemy || cs.enemy === "No Target") {
+                    cs.enemy = "Enemy";
+                }
+            }
+
             redraw();
         }
         return d;

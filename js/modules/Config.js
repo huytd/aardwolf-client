@@ -24,9 +24,9 @@ var Config = {
 
 	height: param('height') || j(window).height() - 20,
 
-	top: param('top') || 0,
+	top: param('top') || 20,
 
-	left: param('left') || 0,
+	left: param('left') || Math.max(0, (j(window).width() - 1000) / 2),
 
 	clean: window.location.search.has('clean') || 0,
 
